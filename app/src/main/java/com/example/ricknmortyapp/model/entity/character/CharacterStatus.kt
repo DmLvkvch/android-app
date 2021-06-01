@@ -1,5 +1,12 @@
 package com.example.ricknmortyapp.model.entity.character
 
-enum class CharacterStatus {
-    ALIVE, DEAD, UNKNOWN
+import com.google.gson.annotations.SerializedName
+
+enum class CharacterStatus(val value: String) {
+    @SerializedName("Alive")
+    ALIVE("Alive"),
+    @SerializedName("Dead")
+    DEAD("Dead"),
+    @SerializedName("unknown")
+    UNKNOWN("unknown")
 }

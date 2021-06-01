@@ -1,5 +1,14 @@
 package com.example.ricknmortyapp.model.entity.character
 
-enum class CharacterGender {
-    FEMALE, MALE, GENDERLESS, UNKNOWN
+import com.google.gson.annotations.SerializedName
+
+enum class CharacterGender(val value: String) {
+    @SerializedName("Female")
+    FEMALE ("Female"),
+    @SerializedName("Male")
+    MALE ("Male"),
+    @SerializedName("Genderless")
+    GENDERLESS("Genderless"),
+    @SerializedName("unknown")
+    UNKNOWN("unknown")
 }

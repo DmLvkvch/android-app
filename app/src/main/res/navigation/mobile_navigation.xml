@@ -2,23 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_character">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.ricknmortyapp.ui.character.CharacterListPageFragment"
+        android:id="@+id/navigation_character"
+        android:name="com.example.ricknmortyapp.ui.character.CharacterListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_character_page" />
+        tools:layout="@layout/fragment_character_list" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.ricknmortyapp.ui.episode.EpisodePageFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_episode_page" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.ricknmortyapp.ui.location.LocationPageFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_location_page" />
 </navigation>
