@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="character_item"
-            type="com.example.ricknmortyapp.model.entity.character.Character" />
+            name="location_item"
+            type="com.example.ricknmortyapp.model.entity.location.Location" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,53 +15,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
-            <ImageView
-                android:id="@+id/character_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/character_name"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.238"
-                app:url="@{character_item.image}"/>
 
             <TextView
-                android:id="@+id/character_name"
+                android:id="@+id/location_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{character_item.name}"
+                android:text="@{location_item.name}"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:layout_below="@+id/character_image" />
+                android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/character_status"
+                android:id="@+id/location_dimension"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@{character_item.status}"
+                android:text="@{location_item.dimension}"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_below="@+id/character_name"/>
+                android:layout_below="@+id/location_name"/>
 
             <TextView
-                android:id="@+id/character_gender"
+                android:id="@+id/location_created"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@{character_item.gender}"
+                android:text="@{location_item.created}"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_below="@+id/character_status"/>
+                android:layout_below="@+id/location_dimension"/>
 
+            <TextView
+                android:id="@+id/location_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{location_item.type}"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_below="@+id/location_created"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>

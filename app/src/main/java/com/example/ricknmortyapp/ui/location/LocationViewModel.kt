@@ -1,29 +1,28 @@
-package com.example.ricknmortyapp.ui.character
+package com.example.ricknmortyapp.ui.location
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.ricknmortyapp.model.Resource
-import com.example.ricknmortyapp.model.entity.character.Character
+import com.example.ricknmortyapp.model.entity.location.Location
 import com.example.ricknmortyapp.model.repository.remote.APIService
 import com.example.ricknmortyapp.ui.BaseViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-
-class CharacterViewModelFactory(private val id: Int) : ViewModelProvider.Factory {
+class LocationViewModelFactory(private val id: Int) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CharacterViewModel::class.java)) {
-            return CharacterViewModel(id) as T
+        if (modelClass.isAssignableFrom(LocationViewModel::class.java)) {
+            return LocationViewModel(id) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-class CharacterViewModel(val id: Int) : BaseViewModel() {
-    var character: MutableLiveData<Resource<Character>> = MutableLiveData()
+class LocationViewModel(val id: Int) : BaseViewModel() {
+    var location: MutableLiveData<Resource<Location>> = MutableLiveData()
 
     @Inject
     lateinit var api: APIService
@@ -38,12 +37,12 @@ class CharacterViewModel(val id: Int) : BaseViewModel() {
 
 
     private suspend fun fetchCharacter(id: Int) {
-        character.postValue(Resource.Loading())
+        location.postValue(Resource.Loading())
         try {
-            val response = api.getCharacterDetails(id)
-            character.postValue(handleCharacterResponse(response))
+            val response = api.getLocationDetails(id)
+            location.postValue(handleCharacterResponse(response))
         } catch (t: Throwable) {
-            character.postValue(
+            location.postValue(
                 t.message?.let {
                     Resource.Error(
                         it
@@ -52,14 +51,14 @@ class CharacterViewModel(val id: Int) : BaseViewModel() {
             )
         }
     }
-}
 
-private fun handleCharacterResponse(response: Response<Character>): Resource<Character> {
-    if (response.isSuccessful) {
-        response.body()?.let { resultResponse ->
-            return Resource.Success(resultResponse)
+    private fun handleCharacterResponse(response: Response<Location>): Resource<Location> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
+            }
         }
+        return Resource.Error(response.message())
     }
-    return Resource.Error(response.message())
 }
 

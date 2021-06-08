@@ -1,30 +1,62 @@
 package com.example.ricknmortyapp.ui.character
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.ricknmortyapp.model.Resource
 import com.example.ricknmortyapp.model.entity.character.CharacterList
-import com.example.ricknmortyapp.model.utils.api.APIServiceRetrofitFactory
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.ricknmortyapp.model.repository.remote.APIService
+import com.example.ricknmortyapp.ui.BaseViewModel
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-class CharacterListViewModel : ViewModel() {
-    var characters: MutableLiveData<CharacterList> = MutableLiveData()
-    private val api = APIServiceRetrofitFactory.retrofit
+
+class CharacterListViewModel() : BaseViewModel() {
+    var characters: MutableLiveData<Resource<CharacterList>> = MutableLiveData()
+
+    @Inject
+    lateinit var api: APIService
+
+    var page: Int = 1
+
+    var isLoading = false
+
     init {
-
-        api.getAllUnits()
-            .enqueue(object : Callback<CharacterList> {
-                override fun onResponse(
-                    call: Call<CharacterList>,
-                    response: Response<CharacterList>
-                ) {
-                    characters.value = response.body()
-                }
-
-                override fun onFailure(call: Call<CharacterList>, t: Throwable) {
-                    println(t.stackTrace)
-                }
-            })
+        getCharacters()
     }
+
+    fun getCharacters() = viewModelScope.launch {
+        isLoading = true
+        fetchCharacters(page)
+        isLoading = false
+    }
+
+
+    private suspend fun fetchCharacters(page: Int) {
+        characters.postValue(Resource.Loading())
+        try {
+            val response = api.getCharactersByPage(page)
+            characters.postValue(handleCharactersResponse(response))
+        } catch (t: Throwable) {
+            characters.postValue(
+                t.message?.let {
+                    Resource.Error(
+                        it
+                    )
+                }
+            )
+        }
+    }
+
+    private fun handleCharactersResponse(response: Response<CharacterList>): Resource<CharacterList> {
+        if (response.isSuccessful) {
+            page++
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    fun isLastPage(): Boolean = page > characters.value?.data?.info?.pages ?: Int.MAX_VALUE
 }

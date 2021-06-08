@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/navigation_character"
         android:name="com.example.ricknmortyapp.ui.character.CharacterListFragment"
-        android:label="@string/title_home"
         tools:layout="@layout/fragment_character_list" />
+
+    <fragment
+        android:id="@+id/navigation_location"
+        android:name="com.example.ricknmortyapp.ui.location.LocationListFragment"
+        tools:layout="@layout/fragment_location_list" />
 
 </navigation>
