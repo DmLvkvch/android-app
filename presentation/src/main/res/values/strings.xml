@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RickNMortyApp</string>
+    <string name="title_characters">Персонажи</string>
+    <string name="title_locations">Локации</string>
+    <string name="title_episodes">Эпизоды</string>
+    <string name="search_hint">search…</string>
+    <string name="button_location_list">Список персонажей</string>
+    <string name="apply">Apply</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="character_name">name</string>
+</resources>
