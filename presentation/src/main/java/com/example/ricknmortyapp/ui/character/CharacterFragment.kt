@@ -14,15 +14,9 @@ class CharacterFragment() : BaseFragment<CharacterViewModel>() {
     private var characterId = -1
 
     companion object {
-        const val ID_EXTRA = "ID_EXTRA"
-
-        fun newInstance(id: Int) =
-            CharacterFragment().apply {
-                arguments = Bundle().also {
-                    it.putInt(ID_EXTRA, id)
-                    characterId = id
-                }
-            }
+        fun newInstance(id: Int) = CharacterFragment().apply {
+            characterId = id
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +25,10 @@ class CharacterFragment() : BaseFragment<CharacterViewModel>() {
         layout = R.layout.fragment_character
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.id = characterId
         viewModel.fetch()
-
         viewModel.character.observe(viewLifecycleOwner, { item ->
             if (item != null) {
                 binding.setVariable(BR.character, item.data)
@@ -48,6 +39,7 @@ class CharacterFragment() : BaseFragment<CharacterViewModel>() {
 
         bindBackNavigationButton(view)
         bindRefreshLayout(view)
+        refresh.isRefreshing = true
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }

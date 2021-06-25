@@ -76,7 +76,7 @@ class CharacterNavigationFragment : Fragment() {
         }
     }
 
-    fun filter(text: String){
+    fun filter(text: String) {
         val childFragment =
             parentFragmentManager.findFragmentByTag("CharacterListFragment")
         if (childFragment is CharacterListFragment) {

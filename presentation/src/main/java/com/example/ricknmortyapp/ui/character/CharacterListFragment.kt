@@ -44,7 +44,7 @@ class CharacterListFragment(private val ids: String? = null) :
             apply {
                 val characterFragment = CharacterFragment.newInstance(item.id)
                 parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.nav_host_fragment, characterFragment)
+                    replace(R.id.nav_host_fragment, characterFragment, item.id.toString())
                     addToBackStack(CharacterListFragment::class.java.canonicalName)
                     commit()
                 }

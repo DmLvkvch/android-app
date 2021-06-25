@@ -24,12 +24,6 @@ interface CharacterDao {
     @Query("SELECT * FROM character")
     suspend fun getCharactersByPage(): MutableList<Character>?
 
-//    name: String?,
-//    status: String?,
-//    species: String?,
-//    type: String?,
-//    gender: String?
-
     @Query(
         "SELECT * FROM character WHERE name LIKE '%' || :name || '%' COLLATE NOCASE " +
                 "AND status LIKE '%' || :status || '%' COLLATE NOCASE " +

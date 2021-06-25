@@ -8,7 +8,7 @@ import com.example.ricknmortyapp.di.Injector
 import com.example.ricknmortyapp.ui.BaseFragment
 import com.example.ricknmortyapp.ui.character.CharacterListFragment
 
-class EpisodeFragment(private val episodeId: Int) : BaseFragment<EpisodeViewModel>() {
+class EpisodeFragment(private val episodeId: Int = -1) : BaseFragment<EpisodeViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,15 +21,17 @@ class EpisodeFragment(private val episodeId: Int) : BaseFragment<EpisodeViewMode
 
         viewModel.id = episodeId
         viewModel.fetch()
-
         viewModel.episode.observe(viewLifecycleOwner, { item ->
-            binding.setVariable(BR.episode, item.data)
-            refresh.isRefreshing = false
-            characterListFragment()
+            if (item != null) {
+                binding.setVariable(BR.episode, item.data)
+                refresh.isRefreshing = false
+                characterListFragment()
+            }
         })
 
         bindBackNavigationButton(view)
         bindRefreshLayout(view)
+        refresh.isRefreshing = true
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }
