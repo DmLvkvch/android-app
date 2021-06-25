@@ -45,7 +45,7 @@ class CharacterNavigationFragment : Fragment() {
         refresh = view.findViewById(R.id.swipe_refresh)
         refresh.setOnRefreshListener {
             val childFragment =
-                parentFragmentManager.findFragmentByTag("CharacterListFragment")
+                parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
             if (childFragment is CharacterListFragment) {
                 childFragment.fetch()
             }
@@ -55,7 +55,7 @@ class CharacterNavigationFragment : Fragment() {
             refresh.isRefreshing = false
         }
         parentFragmentManager.beginTransaction().apply {
-            replace(R.id.replaced_layout, fragment, "CharacterListFragment")
+            replace(R.id.replaced_layout, fragment, getString(R.string.character_list_fragment_tag))
             commit()
         }
 
@@ -63,7 +63,7 @@ class CharacterNavigationFragment : Fragment() {
             val dialogFragment =
                 CharacterFilterDialogFragment.newInstance(name, gender, status, species, type)
             dialogFragment.setTargetFragment(this, 1)
-            dialogFragment.show(parentFragmentManager, "editFilter")
+            dialogFragment.show(parentFragmentManager, getString(R.string.dialog_fragment_tag))
         }
 
         val search = view.findViewById<EditText>(R.id.search)
@@ -78,7 +78,7 @@ class CharacterNavigationFragment : Fragment() {
 
     fun filter(text: String) {
         val childFragment =
-            parentFragmentManager.findFragmentByTag("CharacterListFragment")
+            parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
         if (childFragment is CharacterListFragment) {
             childFragment.filter(CharacterFilter(text))
         }
@@ -102,7 +102,7 @@ class CharacterNavigationFragment : Fragment() {
                         data?.getStringExtra(CharacterFilterDialogFragment.SPECIES_EXTRA).toString()
 
                     val childFragment =
-                        parentFragmentManager.findFragmentByTag("CharacterListFragment")
+                        parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
                     if (childFragment is CharacterListFragment) {
                         childFragment.filter(CharacterFilter(name, status, species, type, gender))
                     }

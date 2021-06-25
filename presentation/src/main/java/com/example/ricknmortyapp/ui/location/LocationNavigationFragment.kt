@@ -54,7 +54,7 @@ class LocationNavigationFragment : Fragment() {
         view.findViewById<ImageButton>(R.id.filter_button).setOnClickListener {
             val dialogFragment = LocationFilterDialogFragment.newInstance(name, type, dimension)
             dialogFragment.setTargetFragment(this, 1)
-            dialogFragment.show(parentFragmentManager, "editFilter")
+            dialogFragment.show(parentFragmentManager, getString(R.string.dialog_fragment_tag))
         }
 
         val search = view.findViewById<EditText>(R.id.search)

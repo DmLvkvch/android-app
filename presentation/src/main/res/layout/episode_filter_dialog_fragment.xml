@@ -33,7 +33,7 @@
             android:backgroundTint="@android:color/white"
             android:drawablePadding="@dimen/dp_32"
             android:gravity="start|center_vertical"
-            android:hint="status"
+            android:hint="@string/episode_filter_hint_status"
             android:textSize="16sp" />
 
     </LinearLayout>

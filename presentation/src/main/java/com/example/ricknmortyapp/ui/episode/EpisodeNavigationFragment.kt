@@ -36,7 +36,7 @@ class EpisodeNavigationFragment : Fragment() {
         refresh = view.findViewById(R.id.swipe_refresh)
         refresh.setOnRefreshListener {
             val childFragment =
-                parentFragmentManager.findFragmentByTag("EpisodeListFragment")
+                parentFragmentManager.findFragmentByTag(getString(R.string.episode_list_fragment_tag))
             if (childFragment is EpisodeListFragment) {
                 childFragment.fetch()
             }
@@ -47,14 +47,14 @@ class EpisodeNavigationFragment : Fragment() {
             refresh.isRefreshing = false
         }
         parentFragmentManager.beginTransaction().apply {
-            replace(R.id.replaced_layout, fragment, "EpisodeListFragment")
+            replace(R.id.replaced_layout, fragment, getString(R.string.episode_list_fragment_tag))
             commit()
         }
 
         view.findViewById<ImageButton>(R.id.filter_button).setOnClickListener {
             val dialogFragment = EpisodeFilterDialogFragment.newInstance(name, episode)
             dialogFragment.setTargetFragment(this, 1)
-            dialogFragment.show(parentFragmentManager, "editFilter")
+            dialogFragment.show(parentFragmentManager, getString(R.string.dialog_fragment_tag))
         }
         val search = view.findViewById<EditText>(R.id.search)
         var work: Runnable
@@ -68,7 +68,7 @@ class EpisodeNavigationFragment : Fragment() {
 
     fun filter(text: String) {
         val childFragment =
-            parentFragmentManager.findFragmentByTag("EpisodeListFragment")
+            parentFragmentManager.findFragmentByTag(getString(R.string.episode_list_fragment_tag))
         if (childFragment is EpisodeListFragment) {
             childFragment.filter(text, "")
         }
@@ -87,7 +87,7 @@ class EpisodeNavigationFragment : Fragment() {
 
 
                     val childFragment =
-                        parentFragmentManager.findFragmentByTag("EpisodeListFragment")
+                        parentFragmentManager.findFragmentByTag(getString(R.string.episode_list_fragment_tag))
                     if (childFragment is EpisodeListFragment) {
                         childFragment.filter(name, episode)
                     }

@@ -33,7 +33,7 @@
             android:backgroundTint="@android:color/white"
             android:drawablePadding="@dimen/dp_32"
             android:gravity="start|center_vertical"
-            android:hint="status"
+            android:hint="@string/character_filter_hint_status"
             android:textSize="16sp" />
 
         <EditText
@@ -45,7 +45,7 @@
             android:backgroundTint="@android:color/white"
             android:drawablePadding="@dimen/dp_32"
             android:gravity="start|center_vertical"
-            android:hint="species"
+            android:hint="@string/character_filter_hint_species"
             android:textSize="16sp" />
 
         <EditText
@@ -57,7 +57,7 @@
             android:backgroundTint="@android:color/white"
             android:drawablePadding="@dimen/dp_32"
             android:gravity="start|center_vertical"
-            android:hint="type"
+            android:hint="@string/character_filter_hint_type"
             android:textSize="16sp" />
 
         <EditText
@@ -69,7 +69,7 @@
             android:backgroundTint="@android:color/white"
             android:drawablePadding="@dimen/dp_32"
             android:gravity="start|center_vertical"
-            android:hint="gender"
+            android:hint="@string/character_filter_hint_gender"
             android:textSize="16sp" />
 
     </LinearLayout>
