@@ -29,4 +29,8 @@ class LocationPagePagingAdapterImpl constructor(private val interactor: ILocatio
     override fun getNextPage(): Int {
         return this.info.next?.split("=")?.last()?.toInt() ?: -1
     }
+
+    override fun reset() {
+        page = 1
+    }
 }

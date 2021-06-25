@@ -29,13 +29,13 @@ class LocationFragment(private val locationId: Int) : BaseFragment<LocationViewM
         })
 
         bindBackNavigationButton(view)
-
+        bindRefreshLayout(view)
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }
     }
 
-    private fun characterListFragment(){
+    private fun characterListFragment() {
         parentFragmentManager.beginTransaction().apply {
             val residents = viewModel.location.value?.data?.residents
             val tmp = StringBuilder()

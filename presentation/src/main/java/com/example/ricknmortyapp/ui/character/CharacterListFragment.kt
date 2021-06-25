@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.entities.character.Character
@@ -14,7 +15,6 @@ import com.example.ricknmortyapp.di.Injector
 import com.example.ricknmortyapp.ui.BaseFragment
 import com.example.ricknmortyapp.ui.adapter.PaginationScrollListener
 import com.example.ricknmortyapp.ui.adapter.RecyclerBindingAdapter
-import com.example.ricknmortyapp.ui.adapter.character.CharacterIdsPagingAdapterImpl
 
 
 class CharacterListFragment(private val ids: String? = null) :
@@ -24,6 +24,9 @@ class CharacterListFragment(private val ids: String? = null) :
 
     private var adapter: RecyclerBindingAdapter<Character> =
         RecyclerBindingAdapter(R.layout.item_character, BR.character_item)
+
+    var onRefreshEnd: () -> Unit = { }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,7 @@ class CharacterListFragment(private val ids: String? = null) :
     ): View? {
         adapter.onClick = { item, _ ->
             apply {
-                val characterFragment = CharacterFragment(item.id)
+                val characterFragment = CharacterFragment.newInstance(item.id)
                 parentFragmentManager.beginTransaction().apply {
                     replace(R.id.nav_host_fragment, characterFragment)
                     addToBackStack(CharacterListFragment::class.java.canonicalName)
@@ -64,7 +67,11 @@ class CharacterListFragment(private val ids: String? = null) :
         recyclerView.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner, { item ->
+            if (item.data?.size == 0) {
+                Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
+            }
             adapter.items = item.data ?: adapter.items
+            onRefreshEnd()
         })
 
         adapter.onLoadingData = {
@@ -92,6 +99,15 @@ class CharacterListFragment(private val ids: String? = null) :
                 adapter.onLoadingData()
             }
         })
+
+    }
+
+    fun filter(filter: CharacterFilter) {
+        viewModel.filter(filter)
+    }
+
+    fun fetch() {
+        viewModel.fetch()
     }
 
     private fun loadNextPage() {

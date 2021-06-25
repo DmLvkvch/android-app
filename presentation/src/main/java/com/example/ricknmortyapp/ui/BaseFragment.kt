@@ -55,6 +55,9 @@ abstract class BaseFragment<VM : BaseViewModel<*>> : Fragment() {
         toolbar.findViewById<ImageButton>(R.id.back_button).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    fun bindRefreshLayout(view: View) {
         this.refresh = view.findViewById(R.id.swipe_refresh)
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.entities.episode.Episode
@@ -14,7 +15,6 @@ import com.example.ricknmortyapp.di.Injector
 import com.example.ricknmortyapp.ui.BaseFragment
 import com.example.ricknmortyapp.ui.adapter.PaginationScrollListener
 import com.example.ricknmortyapp.ui.adapter.RecyclerBindingAdapter
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodeByIdsPagingAdapterImpl
 
 class EpisodeListFragment(
     private val ids: String? = null
@@ -25,6 +25,8 @@ class EpisodeListFragment(
 
     private var adapter: RecyclerBindingAdapter<Episode> =
         RecyclerBindingAdapter(R.layout.item_episode, BR.episode_item)
+
+    var onRefreshEnd: () -> Unit = { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +64,17 @@ class EpisodeListFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.list_recycler)
+        if (ids != null) {
+            recyclerView.layoutManager = GridLayoutManager(this.context, 1)
+        }
         recyclerView.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner, { item ->
+            if (item.data?.size == 0) {
+                Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
+            }
             adapter.items = item.data ?: adapter.items
+            onRefreshEnd()
         })
 
         adapter.onLoadingData = {
@@ -92,6 +101,16 @@ class EpisodeListFragment(
                 adapter.onLoadingData()
             }
         })
+
+
+    }
+
+    fun fetch() {
+        viewModel.fetch()
+    }
+
+    fun filter(name: String?, episode: String?) {
+        viewModel.filter(name, episode)
     }
 
     private fun loadNextPage() {

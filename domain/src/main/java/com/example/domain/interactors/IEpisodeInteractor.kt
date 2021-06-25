@@ -15,7 +15,7 @@ interface IEpisodeInteractor {
 
     suspend fun getEpisodeById(id: Int = -1): Episode
 
-    suspend fun getEpisodesByFilter(name: String, episode: String): EpisodeList
+    suspend fun getEpisodesByFilter(page: Int, name: String?, episode: String?): EpisodeList
 
 }
 
@@ -31,8 +31,8 @@ class EpisodeInteractor @Inject constructor(private val repository: IEpisodeRepo
 
     override suspend fun getEpisodeById(id: Int): Episode = repository.getEpisodeById(id)
 
-    override suspend fun getEpisodesByFilter(name: String, episode: String) =
-        repository.getEpisodeByFilter(name, episode)
+    override suspend fun getEpisodesByFilter(page: Int, name: String?, episode: String?) =
+        repository.getEpisodeByFilter(page, name, episode)
 
 
 }

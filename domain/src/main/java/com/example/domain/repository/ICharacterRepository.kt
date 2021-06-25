@@ -14,11 +14,12 @@ interface ICharacterRepository {
     suspend fun getCharactersByIds(ids: String): MutableList<Character>
 
     suspend fun getCharacterByFilter(
-        name: String,
-        status: String,
-        species: String,
-        type: String,
-        gender: String,
+        page: Int,
+        name: String?,
+        status: String?,
+        species: String?,
+        type: String?,
+        gender: String?
     ): CharacterList
 
 }

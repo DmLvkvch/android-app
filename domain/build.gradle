@@ -35,10 +35,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     api "androidx.room:room-runtime:2.3.0"
+    testImplementation 'junit:junit:4.+'
 
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-
+    testImplementation "io.mockk:mockk:1.9.3"
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
     api 'com.google.code.gson:gson:2.8.7'
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.google.dagger:dagger:2.37'

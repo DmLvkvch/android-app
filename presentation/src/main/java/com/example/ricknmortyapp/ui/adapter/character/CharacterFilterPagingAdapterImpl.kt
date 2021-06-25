@@ -6,25 +6,28 @@ import com.example.domain.repository.Info
 
 class CharacterFilterPagingAdapterImpl constructor(
     private val interactor: ICharacterInteractor,
-    private val name: String,
-    private val status: String,
-    private val species: String,
-    private val type: String,
-    private val gender: String
+    private val name: String?,
+    private val status: String?,
+    private val species: String?,
+    private val type: String?,
+    private val gender: String?
 ) :
     CharacterPagingAdapter() {
 
-    lateinit var info: Info
+    var info: Info = Info()
+
+    var page: Int = 1
 
     override suspend fun getNextPagingData(): CharacterList {
         val charactersByFilter =
-            interactor.getCharactersByFilter(name, status, species, type, gender)
+            interactor.getCharactersByFilter(page, name, status, species, type, gender)
         info = charactersByFilter.info
+        page = getNextPage()
         return charactersByFilter
     }
 
     override fun isNext(): Boolean {
-        return info.next!=null
+        return info.next != null
     }
 
     override fun isLast(): Boolean {
@@ -32,6 +35,10 @@ class CharacterFilterPagingAdapterImpl constructor(
     }
 
     override fun getNextPage(): Int {
-        return 1
+        return info.next?.split("?page=")?.get(1)?.split("&")?.get(0)?.toInt() ?: -1
+    }
+
+    override fun reset() {
+        page = 1
     }
 }

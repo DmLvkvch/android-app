@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.entities.location.Location
@@ -22,6 +23,8 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
     private var adapter: RecyclerBindingAdapter<Location> =
         RecyclerBindingAdapter(R.layout.item_location, BR.location_item)
 
+    var onRefreshEnd: () -> Unit = { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Injector.locationListComponent.inject(this)
@@ -32,7 +35,7 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        viewModel.getNext()
         return inflater.inflate(R.layout.fragment_entity_list, container, false)
     }
 
@@ -42,7 +45,11 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
         recyclerView.adapter = adapter
 
         viewModel.items.observe(viewLifecycleOwner, { item ->
+            if (item.data?.size == 0) {
+                Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
+            }
             adapter.items = item.data ?: adapter.items
+            onRefreshEnd()
         })
 
         adapter.onLoadingData = {
@@ -81,7 +88,14 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
                 adapter.onLoadingData()
             }
         })
-        viewModel.getNext()
+    }
+
+    fun fetch() {
+        viewModel.fetch()
+    }
+
+    fun filter(name: String?, type: String?, dimension: String?) {
+        viewModel.filter(name, type, dimension)
     }
 
     private fun loadNextPage() {

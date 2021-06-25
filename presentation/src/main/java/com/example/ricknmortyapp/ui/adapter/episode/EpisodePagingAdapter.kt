@@ -11,4 +11,6 @@ abstract class EpisodePagingAdapter {
     abstract fun isLast(): Boolean
 
     abstract fun getNextPage(): Int
+
+    abstract fun reset()
 }

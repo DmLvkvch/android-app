@@ -19,7 +19,7 @@ class LocationRepository @Inject constructor(
         results ?: throw IllegalStateException()
     } catch (e: Exception) {
         val results =
-            (databaseStorage.locationDao.getLocationsByPage((page - 1) * 20, page * 20)
+            (databaseStorage.locationDao.getLocationsByPage()
                 ?: throw IllegalStateException())
         LocationList(Info(count = results.size, pages = 1), results)
 
@@ -44,14 +44,20 @@ class LocationRepository @Inject constructor(
     }
 
     override suspend fun getLocationsByFilterParams(
-        name: String,
-        status: String,
-        species: String
+        page: Int,
+        name: String?,
+        type: String?,
+        dimension: String?
     ): LocationList = try {
-        api.getLocationsByFilterParams(name, status, species).body()
+        api.getLocationsByFilterParams(page, name, type, dimension).body()
             ?: throw IllegalStateException()
     } catch (e: Exception) {
-        throw IllegalStateException()
+        val locationsByFilterParams =
+            databaseStorage.locationDao.getLocationsByFilterParams(name, type, dimension)
+        LocationList(
+            locationsByFilterParams?.let { Info(it.size, 1) } ?: Info(),
+            locationsByFilterParams ?: mutableListOf()
+        )
     }
 
 }

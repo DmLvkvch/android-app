@@ -16,11 +16,12 @@ interface ICharacterInteractor {
     suspend fun getCharacterById(id: Int = -1): Character
 
     suspend fun getCharactersByFilter(
-        name: String,
-        status: String,
-        species: String,
-        type: String,
-        gender: String
+        page: Int,
+        name: String?,
+        status: String?,
+        species: String?,
+        type: String?,
+        gender: String?
     ): CharacterList
 
 }
@@ -38,11 +39,12 @@ class CharacterInteractor @Inject constructor(private val repository: ICharacter
     override suspend fun getCharacterById(id: Int): Character = repository.getCharacterById(id)
 
     override suspend fun getCharactersByFilter(
-        name: String,
-        status: String,
-        species: String,
-        type: String,
-        gender: String
-    ): CharacterList = repository.getCharacterByFilter(name, status, species, type, gender)
+        page: Int,
+        name: String?,
+        status: String?,
+        species: String?,
+        type: String?,
+        gender: String?
+    ): CharacterList = repository.getCharacterByFilter(page, name, status, species, type, gender)
 
 }

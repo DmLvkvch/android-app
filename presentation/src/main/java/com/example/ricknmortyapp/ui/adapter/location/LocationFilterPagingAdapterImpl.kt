@@ -6,18 +6,20 @@ import com.example.domain.repository.Info
 
 class LocationFilterPagingAdapterImpl constructor(
     private val interactor: ILocationInteractor,
-    private val name: String,
-    private val status: String,
-    private val species: String
+    private val name: String?,
+    private val type: String?,
+    private val dimension: String?
 ) :
     LocationPagingAdapter() {
 
-    private lateinit var info: Info
+    var info: Info = Info()
+    var page = 1
 
     override suspend fun getNextPagingData(): LocationList {
         val charactersByFilter =
-            interactor.getLocationsByFilter(name, status, species)
+            interactor.getLocationsByFilter(page, name, type, dimension)
         info = charactersByFilter.info
+        page = getNextPage()
         return charactersByFilter
     }
 
@@ -30,6 +32,10 @@ class LocationFilterPagingAdapterImpl constructor(
     }
 
     override fun getNextPage(): Int {
-        return 1
+        return info.next?.split("?page=")?.get(1)?.split("&")?.get(0)?.toInt() ?: -1
+    }
+
+    override fun reset() {
+        page = 1
     }
 }

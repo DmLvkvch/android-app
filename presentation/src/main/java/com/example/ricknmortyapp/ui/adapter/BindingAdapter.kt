@@ -3,6 +3,7 @@ package com.example.ricknmortyapp.ui.adapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import com.bumptech.glide.Glide
 import com.example.domain.entities.character.CharacterGender
@@ -45,12 +46,7 @@ fun onLocationClicked(view: TextView, location: CharacterLocation?) {
     val parent = view.findFragment<CharacterFragment>()
     view.setOnClickListener {
         val id: Int = location?.url?.split("/")?.last()?.toInt() ?: -1
-        val fragment = LocationFragment(id)
-        parent.parentFragmentManager.beginTransaction().apply {
-            replace(R.id.nav_host_fragment, fragment)
-            addToBackStack(CharacterFragment::class.java.canonicalName)
-            commit()
-        }
+        bindViewLocation(parent, id)
     }
 }
 
@@ -59,11 +55,15 @@ fun onOriginClicked(view: TextView, location: CharacterOrigin?) {
     val parent = view.findFragment<CharacterFragment>()
     view.setOnClickListener {
         val id: Int = location?.url?.split("/")?.last()?.toInt() ?: -1
-        val fragment = LocationFragment(id)
-        parent.parentFragmentManager.beginTransaction().apply {
-            replace(R.id.nav_host_fragment, fragment)
-            addToBackStack(CharacterFragment::class.java.canonicalName)
-            commit()
-        }
+        bindViewLocation(parent, id)
+    }
+}
+
+fun bindViewLocation(parent: Fragment, id: Int) {
+    val fragment = LocationFragment(id)
+    parent.parentFragmentManager.beginTransaction().apply {
+        replace(R.id.nav_host_fragment, fragment)
+        addToBackStack(CharacterFragment::class.java.canonicalName)
+        commit()
     }
 }

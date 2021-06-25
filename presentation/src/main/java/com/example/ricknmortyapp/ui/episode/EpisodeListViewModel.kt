@@ -6,8 +6,9 @@ import com.example.domain.entities.episode.Episode
 import com.example.domain.interactors.IEpisodeInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodeByIdsPagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodeByPagePagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.episode.EpisodeFilterPagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.episode.EpisodeIdsPagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.episode.EpisodePagePagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.episode.EpisodePagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +22,13 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
 
     var isLoading = false
 
-    var adapter: EpisodePagingAdapter = EpisodeByPagePagingAdapterImpl(interactor)
+    var adapter: EpisodePagingAdapter = EpisodePagePagingAdapterImpl(interactor)
+
+    fun fetch() {
+        adapter.reset()
+        reset()
+        getNext()
+    }
 
     fun getNext() = viewModelScope.launch {
         isLoading = true
@@ -30,7 +37,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
     }
 
     fun getData(ids: String) = viewModelScope.launch {
-        adapter = EpisodeByIdsPagingAdapterImpl(interactor, ids)
+        adapter = EpisodeIdsPagingAdapterImpl(interactor, ids)
         fetchData(ids)
     }
 
@@ -53,6 +60,20 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
         } catch (t: Throwable) {
             items.postValue(t.message?.let { Resource.Error(it) })
         }
+    }
+
+    fun filter(name: String?, episode: String?) {
+        adapter = EpisodeFilterPagingAdapterImpl(
+            interactor, name, episode
+        )
+        items.postValue(Resource.Loading())
+        episodes.clear()
+        getNext()
+    }
+
+    fun reset() {
+        items.postValue(Resource.Loading())
+        episodes.clear()
     }
 
     fun isLastPage(): Boolean {

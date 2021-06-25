@@ -19,8 +19,9 @@ interface EpisodeApiService {
 
     @GET("episode")
     suspend fun getEpisodesByFilterParams(
-        @Query("name") name: String,
-        @Query("episode") status: String
+        @Query("page") page: Int = -1,
+        @Query("name") name: String? = null,
+        @Query("episode") status: String? = null
     ): Response<EpisodeList>
 
 }

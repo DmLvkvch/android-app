@@ -14,9 +14,10 @@ interface ILocationRepository {
     suspend fun getLocationsByIds(ids: String): MutableList<Location>
 
     suspend fun getLocationsByFilterParams(
-        name: String,
-        status: String,
-        species: String
+        page: Int,
+        name: String?,
+        type: String?,
+        dimension: String?
     ): LocationList
 }
 

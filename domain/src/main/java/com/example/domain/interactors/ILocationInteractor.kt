@@ -17,9 +17,10 @@ interface ILocationInteractor {
     suspend fun getLocationById(id: Int = -1): Location
 
     suspend fun getLocationsByFilter(
-        name: String,
-        status: String,
-        species: String
+        page: Int,
+        name: String?,
+        type: String?,
+        dimension: String?
     ): LocationList
 
 }
@@ -35,10 +36,12 @@ class LocationInteractor @Inject constructor(private val repository: ILocationRe
         repository.getLocationsByIds(ids)
 
     override suspend fun getLocationById(id: Int): Location = repository.getLocationById(id)
+
     override suspend fun getLocationsByFilter(
-        name: String,
-        status: String,
-        species: String
-    ): LocationList = repository.getLocationsByFilterParams(name, status, species)
+        page: Int,
+        name: String?,
+        type: String?,
+        dimension: String?
+    ): LocationList = repository.getLocationsByFilterParams(page, name, type, dimension)
 }
 

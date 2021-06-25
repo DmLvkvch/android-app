@@ -29,14 +29,14 @@ class EpisodeFragment(private val episodeId: Int) : BaseFragment<EpisodeViewMode
         })
 
         bindBackNavigationButton(view)
-
+        bindRefreshLayout(view)
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }
 
     }
 
-    private fun characterListFragment(){
+    private fun characterListFragment() {
         parentFragmentManager.beginTransaction().apply {
             val characters = viewModel.episode.value?.data?.characters
             val tmp = StringBuilder()

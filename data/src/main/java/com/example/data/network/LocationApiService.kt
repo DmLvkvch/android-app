@@ -19,9 +19,10 @@ interface LocationApiService {
 
     @GET("location")
     suspend fun getLocationsByFilterParams(
-        @Query("name") name: String,
-        @Query("type") status: String,
-        @Query("dimension") species: String
+        @Query("page") page: Int = -1,
+        @Query("name") name: String? = null,
+        @Query("type") type: String? = null,
+        @Query("dimension") dimension: String? = null
     ): Response<LocationList>
 
 }

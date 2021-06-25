@@ -14,7 +14,8 @@ interface IEpisodeRepository {
     suspend fun getEpisodesByIds(ids: String): MutableList<Episode>
 
     suspend fun getEpisodeByFilter(
-        name: String,
-        episode: String
+        page: Int,
+        name: String?,
+        episode: String?
     ): EpisodeList
 }

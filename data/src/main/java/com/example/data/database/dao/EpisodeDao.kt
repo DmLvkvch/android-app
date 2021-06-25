@@ -20,13 +20,13 @@ interface EpisodeDao {
     @Query("SELECT * FROM episode WHERE id in (:ids)")
     suspend fun getEpisodesByIds(ids: MutableList<Int>): MutableList<Episode>?
 
-    @Query("SELECT * FROM episode LIMIT (:from), (:to)")
-    suspend fun getEpisodesByPage(from: Int, to: Int): MutableList<Episode>?
+    @Query("SELECT * FROM episode")
+    suspend fun getEpisodesByPage(): MutableList<Episode>?
 
-    @Query("SELECT * FROM episode WHERE name=:name AND episode=:episode")
+    @Query("SELECT * FROM episode WHERE name LIKE '%' || :name || '%' COLLATE NOCASE AND episode LIKE '%' || :episode || '%' COLLATE NOCASE")
     suspend fun getEpisodesByFilterParams(
-        name: String,
-        episode: String
+        name: String?,
+        episode: String?
     ): MutableList<Episode>?
 }
 

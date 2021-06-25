@@ -6,6 +6,7 @@ import com.example.domain.entities.character.Character
 import com.example.domain.interactors.ICharacterInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
+import com.example.ricknmortyapp.ui.adapter.character.CharacterFilterPagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.character.CharacterIdsPagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.character.CharacterPagePagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.character.CharacterPagingAdapter
@@ -25,6 +26,8 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
     var adapter: CharacterPagingAdapter = CharacterPagePagingAdapterImpl(interactor)
 
     fun fetch() {
+        adapter.reset()
+        reset()
         getCharacters()
     }
 
@@ -62,5 +65,19 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
 
     fun isLastPage(): Boolean {
         return adapter.isLast()
+    }
+
+    fun reset() {
+        items.postValue(Resource.Loading())
+        characters.clear()
+    }
+
+    fun filter(filter: CharacterFilter) {
+        adapter = CharacterFilterPagingAdapterImpl(
+            interactor, filter.name, filter.status,
+            filter.species, filter.type, filter.gender
+        )
+        reset()
+        getCharacters()
     }
 }

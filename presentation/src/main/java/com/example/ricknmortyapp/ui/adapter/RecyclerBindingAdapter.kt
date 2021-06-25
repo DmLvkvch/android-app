@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class RecyclerBindingAdapter<T : Any>(private val layout: Int, private val variableId: Int) :
-    PagingDataAdapter<T, RecyclerView.ViewHolder>(DiffUtilComparator<T>()) {
+    PagingDataAdapter<T, RecyclerView.ViewHolder>(DiffUtilComparator()) {
 
     private val LOADING = 0
     private val ITEM = 1

@@ -26,4 +26,8 @@ class LocationIdsPagingAdapterImpl constructor(
     override fun getNextPage(): Int {
         return -1
     }
+
+    override fun reset() {
+
+    }
 }

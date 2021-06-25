@@ -18,7 +18,7 @@ class EpisodeRepository @Inject constructor(
         results?.let { databaseStorage.episodeDao.saveAllEpisodes(it.results) }
         results ?: throw IllegalStateException()
     } catch (e: Exception) {
-        val mutableList = (databaseStorage.episodeDao.getEpisodesByPage((page - 1) * 20, page * 20)
+        val mutableList = (databaseStorage.episodeDao.getEpisodesByPage()
             ?: throw IllegalStateException())
         EpisodeList(Info(count = mutableList.size, pages = 1), mutableList)
     }
@@ -45,12 +45,15 @@ class EpisodeRepository @Inject constructor(
     }
 
     override suspend fun getEpisodeByFilter(
-        name: String,
-        episode: String
+        page: Int,
+        name: String?,
+        episode: String?
     ): EpisodeList = try {
-        api.getEpisodesByFilterParams(name, episode).body() ?: throw IllegalStateException()
+        api.getEpisodesByFilterParams(page, name, episode).body() ?: throw IllegalStateException()
     } catch (e: Exception) {
-        throw IllegalStateException()
+        val episodesByFilterParams =
+            databaseStorage.episodeDao.getEpisodesByFilterParams(name, episode)
+        EpisodeList(episodesByFilterParams?.let { Info(it.size, 1) } ?: Info(),
+            episodesByFilterParams ?: mutableListOf())
     }
-
 }

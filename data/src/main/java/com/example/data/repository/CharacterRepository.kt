@@ -6,7 +6,6 @@ import com.example.domain.entities.character.Character
 import com.example.domain.entities.character.CharacterList
 import com.example.domain.repository.ICharacterRepository
 import com.example.domain.repository.Info
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
@@ -19,7 +18,7 @@ class CharacterRepository @Inject constructor(
         results?.let { databaseStorage.characterDao.saveAllCharacters(it.results) }
         results ?: throw IllegalStateException()
     } catch (e: Exception) {
-        val results = databaseStorage.characterDao.getCharactersByPage((page - 1) * 20, page * 20)
+        val results = databaseStorage.characterDao.getCharactersByPage()
             ?: throw IllegalStateException()
         CharacterList(Info(count = results.size, pages = 1), results)
     }
@@ -47,15 +46,27 @@ class CharacterRepository @Inject constructor(
     }
 
     override suspend fun getCharacterByFilter(
-        name: String,
-        status: String,
-        species: String,
-        type: String,
-        gender: String
+        page: Int,
+        name: String?,
+        status: String?,
+        species: String?,
+        type: String?,
+        gender: String?
     ): CharacterList = try {
-        api.getCharactersByFilterParams(name, status, species, type, gender).body() ?: throw IllegalStateException()
+        api.getCharactersByFilterParams(page, name, status, species, type, gender).body()
+            ?: throw IllegalStateException()
     } catch (e: Exception) {
-        throw IllegalStateException()
+        val charactersByFilterParams = databaseStorage.characterDao.getCharactersByFilterParams(
+            name,
+            status,
+            species,
+            type,
+            gender
+        )
+        CharacterList(
+            charactersByFilterParams?.let { Info(it.size, 1) } ?: Info(),
+            charactersByFilterParams ?: mutableListOf()
+        )
     }
 
 }

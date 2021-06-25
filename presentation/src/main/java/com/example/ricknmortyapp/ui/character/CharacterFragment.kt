@@ -9,13 +9,28 @@ import com.example.ricknmortyapp.ui.BaseFragment
 import com.example.ricknmortyapp.ui.episode.EpisodeListFragment
 
 
-class CharacterFragment(private val characterId: Int) : BaseFragment<CharacterViewModel>() {
+class CharacterFragment() : BaseFragment<CharacterViewModel>() {
+
+    private var characterId = -1
+
+    companion object {
+        const val ID_EXTRA = "ID_EXTRA"
+
+        fun newInstance(id: Int) =
+            CharacterFragment().apply {
+                arguments = Bundle().also {
+                    it.putInt(ID_EXTRA, id)
+                    characterId = id
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Injector.characterComponent.inject(this)
         layout = R.layout.fragment_character
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,13 +39,15 @@ class CharacterFragment(private val characterId: Int) : BaseFragment<CharacterVi
         viewModel.fetch()
 
         viewModel.character.observe(viewLifecycleOwner, { item ->
-            binding.setVariable(BR.character, item.data)
-            refresh.isRefreshing = false
-            item.data?.episode?.let { getEpisodesIds(it) }
+            if (item != null) {
+                binding.setVariable(BR.character, item.data)
+                refresh.isRefreshing = false
+                item.data?.episode?.let { getEpisodesIds(it) }
+            }
         })
 
         bindBackNavigationButton(view)
-
+        bindRefreshLayout(view)
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }
@@ -50,8 +67,6 @@ class CharacterFragment(private val characterId: Int) : BaseFragment<CharacterVi
             commit()
         }
     }
-
-
 
     override fun injectViewModel() {
         viewModel = getViewModel()

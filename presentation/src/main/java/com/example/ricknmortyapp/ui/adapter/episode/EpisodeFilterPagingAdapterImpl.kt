@@ -1,22 +1,24 @@
 package com.example.ricknmortyapp.ui.adapter.episode
 
-import com.example.domain.entities.character.CharacterList
 import com.example.domain.entities.episode.EpisodeList
 import com.example.domain.interactors.IEpisodeInteractor
 import com.example.domain.repository.Info
 
 class EpisodeFilterPagingAdapterImpl constructor(
     private val interactor: IEpisodeInteractor,
-    private val name: String, private val episode: String
+    private val name: String?, private val episode: String?
 ) :
     EpisodePagingAdapter() {
 
-    lateinit var info: Info
+    var info: Info = Info()
+
+    var page = 1
 
     override suspend fun getNextPagingData(): EpisodeList {
         val items =
-            interactor.getEpisodesByFilter(name, episode)
+            interactor.getEpisodesByFilter(page, name, episode)
         info = items.info
+        page = getNextPage()
         return items
     }
 
@@ -29,6 +31,10 @@ class EpisodeFilterPagingAdapterImpl constructor(
     }
 
     override fun getNextPage(): Int {
-        return 1
+        return info.next?.split("?page=")?.get(1)?.split("&")?.get(0)?.toInt() ?: -1
+    }
+
+    override fun reset() {
+        page = 1
     }
 }

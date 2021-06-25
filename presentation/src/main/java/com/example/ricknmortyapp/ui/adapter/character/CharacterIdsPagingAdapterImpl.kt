@@ -26,4 +26,8 @@ class CharacterIdsPagingAdapterImpl constructor(
     override fun getNextPage(): Int {
         return -1
     }
+
+    override fun reset() {
+
+    }
 }

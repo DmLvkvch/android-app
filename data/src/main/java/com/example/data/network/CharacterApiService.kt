@@ -20,11 +20,12 @@ interface CharacterApiService {
 
     @GET("character")
     suspend fun getCharactersByFilterParams(
-        @Query("name") name: String,
-        @Query("status") status: String,
-        @Query("species") species: String,
-        @Query("type") type: String,
-        @Query("gender") gender: String
+        @Query("page") page: Int = -1,
+        @Query("name") name: String? = null,
+        @Query("status") status: String? = null,
+        @Query("species") species: String? = null,
+        @Query("type") type: String? = null,
+        @Query("gender") gender: String? = null
     ): Response<CharacterList>
 
 }
