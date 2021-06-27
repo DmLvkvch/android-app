@@ -73,10 +73,10 @@ class EpisodeFilterDialogFragment : DialogFragment() {
                     dialog.dismiss()
 
                 }
-                .setNegativeButton("Отмена",
-                    { dialog, id ->
-                        getDialog()?.cancel()
-                    })
+                .setNegativeButton("Отмена"
+                ) { _, _ ->
+                    dialog?.cancel()
+                }
 
             builder.create()
         } ?: throw IllegalStateException()

@@ -68,10 +68,14 @@ class LocationNavigationFragment : Fragment() {
     }
 
     fun filter(text: String) {
-        val childFragment =
-            parentFragmentManager.findFragmentByTag(getString(R.string.location_list_tag))
-        if (childFragment is LocationListFragment) {
-            childFragment.filter(text, "", "")
+        try {
+            val childFragment =
+                parentFragmentManager.findFragmentByTag(getString(R.string.location_list_tag))
+            if (childFragment is LocationListFragment) {
+                childFragment.filter(text)
+            }
+        } catch (e: Exception) {
+            print(e.message)
         }
     }
 

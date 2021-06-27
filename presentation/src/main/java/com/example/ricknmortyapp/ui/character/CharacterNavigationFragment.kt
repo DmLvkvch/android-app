@@ -77,10 +77,15 @@ class CharacterNavigationFragment : Fragment() {
     }
 
     fun filter(text: String) {
-        val childFragment =
-            parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
-        if (childFragment is CharacterListFragment) {
-            childFragment.filter(CharacterFilter(text))
+
+        try {
+            val childFragment =
+                parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
+            if (childFragment is CharacterListFragment) {
+                childFragment.filter(text)
+            }
+        } catch (e: Exception) {
+
         }
     }
 
@@ -104,7 +109,7 @@ class CharacterNavigationFragment : Fragment() {
                     val childFragment =
                         parentFragmentManager.findFragmentByTag(getString(R.string.character_list_fragment_tag))
                     if (childFragment is CharacterListFragment) {
-                        childFragment.filter(CharacterFilter(name, status, species, type, gender))
+                        childFragment.filter(name, status, species, type, gender)
                     }
                 }
             }

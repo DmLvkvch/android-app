@@ -1,31 +1,29 @@
 package com.example.ricknmortyapp.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 
 class RecyclerBindingAdapter<T : Any>(private val layout: Int, private val variableId: Int) :
-    PagingDataAdapter<T, RecyclerView.ViewHolder>(DiffUtilComparator()) {
-
-    private val LOADING = 0
-    private val ITEM = 1
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items = mutableListOf<T>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
     var onClick: (item: T, position: Int) -> Unit = { _, _ -> }
-    var onLoadingData: () -> Unit = { -> }
-    var onLoadingDataEnd: () -> Unit = { -> }
+
+    fun updateAdapter(updatedList: MutableList<T>?) {
+        if (updatedList == null) {
+            return
+        }
+        val result = DiffUtil.calculateDiff(DiffCallback(items, updatedList), true)
+        this.items.clear()
+        this.items.addAll(updatedList)
+        result.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return BindingHolder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
@@ -33,7 +31,6 @@ class RecyclerBindingAdapter<T : Any>(private val layout: Int, private val varia
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
-        onLoadingDataEnd()
         holder.itemView.setOnClickListener {
             onClick(item, position)
         }
@@ -41,30 +38,26 @@ class RecyclerBindingAdapter<T : Any>(private val layout: Int, private val varia
         holder.binding?.setVariable(variableId, item)
     }
 
-    fun addItems(items: MutableList<T>) {
-        this.items.addAll(items)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount() = items.size
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == items.size - 1) LOADING else ITEM
-    }
 
     class BindingHolder(v: View) : RecyclerView.ViewHolder(v) {
         val binding: ViewDataBinding? = DataBindingUtil.bind(v)
     }
 
+    class DiffCallback<T>(
+        private val oldList: List<T>,
+        private val newList: List<T>
+    ) : DiffUtil.Callback() {
 
-    class DiffUtilComparator<T> : DiffUtil.ItemCallback<T>() {
-        override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-            return oldItem == newItem
-        }
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            oldList[oldItemPosition] == newList[newItemPosition]
 
-        @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-            return oldItem!! == newItem
-        }
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            oldList[oldItemPosition] == newList[newItemPosition]
     }
 }

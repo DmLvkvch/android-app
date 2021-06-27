@@ -67,10 +67,14 @@ class EpisodeNavigationFragment : Fragment() {
     }
 
     fun filter(text: String) {
-        val childFragment =
-            parentFragmentManager.findFragmentByTag(getString(R.string.episode_list_fragment_tag))
-        if (childFragment is EpisodeListFragment) {
-            childFragment.filter(text, "")
+        try {
+            val childFragment =
+                parentFragmentManager.findFragmentByTag(getString(R.string.episode_list_fragment_tag))
+            if (childFragment is EpisodeListFragment) {
+                childFragment.filter(text)
+            }
+        }catch (e: Exception){
+
         }
     }
 

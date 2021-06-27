@@ -3,14 +3,15 @@ package com.example.ricknmortyapp.ui.adapter.location
 import com.example.domain.entities.location.LocationList
 import com.example.domain.interactors.ILocationInteractor
 import com.example.domain.repository.Info
+import com.example.ricknmortyapp.ui.adapter.PagingAdapter
 
 class LocationFilterPagingAdapterImpl constructor(
     private val interactor: ILocationInteractor,
-    private val name: String?,
-    private val type: String?,
-    private val dimension: String?
+    private val name: String = "",
+    private val type: String = "",
+    private val dimension: String = ""
 ) :
-    LocationPagingAdapter() {
+    PagingAdapter<LocationList> {
 
     var info: Info = Info()
     var page = 1
@@ -21,10 +22,6 @@ class LocationFilterPagingAdapterImpl constructor(
         info = charactersByFilter.info
         page = getNextPage()
         return charactersByFilter
-    }
-
-    override fun isNext(): Boolean {
-        return info.next != null
     }
 
     override fun isLast(): Boolean {

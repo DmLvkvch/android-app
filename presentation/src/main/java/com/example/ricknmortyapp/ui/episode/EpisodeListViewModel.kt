@@ -3,13 +3,13 @@ package com.example.ricknmortyapp.ui.episode
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entities.episode.Episode
+import com.example.domain.entities.episode.EpisodeList
 import com.example.domain.interactors.IEpisodeInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
+import com.example.ricknmortyapp.ui.adapter.PagingAdapter
 import com.example.ricknmortyapp.ui.adapter.episode.EpisodeFilterPagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.episode.EpisodeIdsPagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodePagePagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodePagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
 
     var isLoading = false
 
-    var adapter: EpisodePagingAdapter = EpisodePagePagingAdapterImpl(interactor)
+    var adapter: PagingAdapter<EpisodeList> = EpisodeFilterPagingAdapterImpl(interactor)
 
     fun fetch() {
         adapter.reset()
@@ -62,7 +62,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
         }
     }
 
-    fun filter(name: String?, episode: String?) {
+    fun filter(name: String = "", episode: String = "") {
         adapter = EpisodeFilterPagingAdapterImpl(
             interactor, name, episode
         )

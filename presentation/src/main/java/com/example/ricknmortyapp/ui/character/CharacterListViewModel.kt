@@ -3,13 +3,13 @@ package com.example.ricknmortyapp.ui.character
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entities.character.Character
+import com.example.domain.entities.character.CharacterList
 import com.example.domain.interactors.ICharacterInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
+import com.example.ricknmortyapp.ui.adapter.PagingAdapter
 import com.example.ricknmortyapp.ui.adapter.character.CharacterFilterPagingAdapterImpl
 import com.example.ricknmortyapp.ui.adapter.character.CharacterIdsPagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.character.CharacterPagePagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.character.CharacterPagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
 
     var isLoading = false
 
-    var adapter: CharacterPagingAdapter = CharacterPagePagingAdapterImpl(interactor)
+    var adapter: PagingAdapter<CharacterList> = CharacterFilterPagingAdapterImpl(interactor)
 
     fun fetch() {
         adapter.reset()
@@ -72,10 +72,16 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
         characters.clear()
     }
 
-    fun filter(filter: CharacterFilter) {
+    fun filter(
+        name: String = "",
+        status: String = "",
+        species: String = "",
+        type: String = "",
+        gender: String = ""
+    ) {
         adapter = CharacterFilterPagingAdapterImpl(
-            interactor, filter.name, filter.status,
-            filter.species, filter.type, filter.gender
+            interactor, name, status,
+            species, type, gender
         )
         reset()
         getCharacters()

@@ -24,6 +24,8 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
         RecyclerBindingAdapter(R.layout.item_location, BR.location_item)
 
     var onRefreshEnd: () -> Unit = { }
+    var onLoadingData: () -> Unit = { }
+    var onLoadingDataEnd: () -> Unit = { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +50,17 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
             if (item.data?.size == 0) {
                 Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
             }
-            adapter.items = item.data ?: adapter.items
+            adapter.updateAdapter(item.data)
             onRefreshEnd()
+            onLoadingDataEnd()
         })
 
-        adapter.onLoadingData = {
+        onLoadingData = {
             if (viewModel.isLoading) view.findViewById<ProgressBar>(R.id.progress).visibility =
                 View.VISIBLE
         }
 
-        adapter.onLoadingDataEnd = {
+        onLoadingDataEnd = {
             view.findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
         }
 
@@ -85,7 +88,7 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
 
             override fun loadMoreItems() {
                 loadNextPage()
-                adapter.onLoadingData()
+                onLoadingData()
             }
         })
     }
@@ -94,7 +97,7 @@ class LocationListFragment : BaseFragment<LocationListViewModel>() {
         viewModel.fetch()
     }
 
-    fun filter(name: String?, type: String?, dimension: String?) {
+    fun filter(name: String = "", type: String = "", dimension: String = "") {
         viewModel.filter(name, type, dimension)
     }
 

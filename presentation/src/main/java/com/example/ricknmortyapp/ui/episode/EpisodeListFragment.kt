@@ -27,6 +27,8 @@ class EpisodeListFragment(
         RecyclerBindingAdapter(R.layout.item_episode, BR.episode_item)
 
     var onRefreshEnd: () -> Unit = { }
+    var onLoadingData: () -> Unit = { }
+    var onLoadingDataEnd: () -> Unit = { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,18 +75,20 @@ class EpisodeListFragment(
             if (item.data?.size == 0) {
                 Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
             }
-            adapter.items = item.data ?: adapter.items
+            adapter.updateAdapter(item.data)
             onRefreshEnd()
+            onLoadingDataEnd()
         })
 
-        adapter.onLoadingData = {
+        onLoadingData = {
             if (viewModel.isLoading) view.findViewById<ProgressBar>(R.id.progress).visibility =
                 View.VISIBLE
         }
 
-        adapter.onLoadingDataEnd = {
+        onLoadingDataEnd = {
             view.findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
         }
+
         recyclerView.addOnScrollListener(object :
             PaginationScrollListener(recyclerView.layoutManager as GridLayoutManager) {
 
@@ -98,18 +102,16 @@ class EpisodeListFragment(
 
             override fun loadMoreItems() {
                 loadNextPage()
-                adapter.onLoadingData()
+                onLoadingData()
             }
         })
-
-
     }
 
     fun fetch() {
         viewModel.fetch()
     }
 
-    fun filter(name: String?, episode: String?) {
+    fun filter(name: String = "", episode: String = "") {
         viewModel.filter(name, episode)
     }
 

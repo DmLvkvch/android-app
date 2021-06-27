@@ -26,13 +26,13 @@ class CharacterListFragment(private val ids: String? = null) :
         RecyclerBindingAdapter(R.layout.item_character, BR.character_item)
 
     var onRefreshEnd: () -> Unit = { }
+    var onLoadingData: () -> Unit = { }
+    var onLoadingDataEnd: () -> Unit = { }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Injector.characterListComponent.inject(this)
-        adapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
     override fun onCreateView(
@@ -70,16 +70,17 @@ class CharacterListFragment(private val ids: String? = null) :
             if (item.data?.size == 0) {
                 Toast.makeText(this.context, "No data", Toast.LENGTH_SHORT).show()
             }
-            adapter.items = item.data ?: adapter.items
+            adapter.updateAdapter(item.data)
             onRefreshEnd()
+            onLoadingDataEnd()
         })
 
-        adapter.onLoadingData = {
+        onLoadingData = {
             if (viewModel.isLoading) view.findViewById<ProgressBar>(R.id.progress).visibility =
                 View.VISIBLE
         }
 
-        adapter.onLoadingDataEnd = {
+        onLoadingDataEnd = {
             view.findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
         }
 
@@ -96,14 +97,20 @@ class CharacterListFragment(private val ids: String? = null) :
 
             override fun loadMoreItems() {
                 loadNextPage()
-                adapter.onLoadingData()
+                onLoadingData()
             }
         })
 
     }
 
-    fun filter(filter: CharacterFilter) {
-        viewModel.filter(filter)
+    fun filter(
+        name: String = "",
+        status: String = "",
+        species: String = "",
+        type: String = "",
+        gender: String = ""
+    ) {
+        viewModel.filter(name, status, species, type, gender)
     }
 
     fun fetch() {
