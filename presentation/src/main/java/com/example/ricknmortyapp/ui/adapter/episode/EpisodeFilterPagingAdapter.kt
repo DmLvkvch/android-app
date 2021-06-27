@@ -4,7 +4,7 @@ import com.example.domain.entities.episode.EpisodeList
 import com.example.domain.interactors.IEpisodeInteractor
 import com.example.ricknmortyapp.ui.adapter.PagingByFilter
 
-class EpisodeFilterPagingAdapterImpl constructor(
+class EpisodeFilterPagingAdapter constructor(
     private val interactor: IEpisodeInteractor,
     private val name: String = "", private val episode: String = ""
 ) :

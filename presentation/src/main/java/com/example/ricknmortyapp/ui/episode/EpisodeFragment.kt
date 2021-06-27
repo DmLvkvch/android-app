@@ -22,11 +22,9 @@ class EpisodeFragment(private val episodeId: Int = -1) : BaseFragment<EpisodeVie
         viewModel.id = episodeId
         viewModel.fetch()
         viewModel.episode.observe(viewLifecycleOwner, { item ->
-            if (item != null) {
-                binding.setVariable(BR.episode, item.data)
-                refresh.isRefreshing = false
-                characterListFragment()
-            }
+            binding.setVariable(BR.episode, item.data)
+            refresh.isRefreshing = false
+            characterListFragment()
         })
 
         bindBackNavigationButton(view)
@@ -35,7 +33,6 @@ class EpisodeFragment(private val episodeId: Int = -1) : BaseFragment<EpisodeVie
         refresh.setOnRefreshListener {
             viewModel.fetch()
         }
-
     }
 
     private fun characterListFragment() {

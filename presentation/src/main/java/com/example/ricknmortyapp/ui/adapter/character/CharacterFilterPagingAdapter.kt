@@ -5,7 +5,7 @@ import com.example.domain.interactors.ICharacterInteractor
 import com.example.ricknmortyapp.ui.adapter.Action
 import com.example.ricknmortyapp.ui.adapter.PagingByFilter
 
-class CharacterFilterPagingAdapterImpl constructor(
+class CharacterFilterPagingAdapter constructor(
     private val interactor: ICharacterInteractor,
     private val name: String = "",
     private val status: String = "",

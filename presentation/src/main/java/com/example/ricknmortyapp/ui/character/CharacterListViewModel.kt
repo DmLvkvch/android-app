@@ -8,8 +8,8 @@ import com.example.domain.interactors.ICharacterInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
 import com.example.ricknmortyapp.ui.adapter.PagingAdapter
-import com.example.ricknmortyapp.ui.adapter.character.CharacterFilterPagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.character.CharacterIdsPagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.character.CharacterFilterPagingAdapter
+import com.example.ricknmortyapp.ui.adapter.character.CharacterIdsPagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
 
     var isLoading = false
 
-    var adapter: PagingAdapter<CharacterList> = CharacterFilterPagingAdapterImpl(interactor)
+    var adapter: PagingAdapter<CharacterList> = CharacterFilterPagingAdapter(interactor)
 
     fun fetch() {
         adapter.reset()
@@ -38,7 +38,7 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
     }
 
     fun getCharacters(ids: String) = viewModelScope.launch {
-        adapter = CharacterIdsPagingAdapterImpl(interactor, ids)
+        adapter = CharacterIdsPagingAdapter(interactor, ids)
         fetchCharacters(ids)
     }
 
@@ -79,7 +79,7 @@ class CharacterListViewModel @Inject constructor(private val interactor: ICharac
         type: String = "",
         gender: String = ""
     ) {
-        adapter = CharacterFilterPagingAdapterImpl(
+        adapter = CharacterFilterPagingAdapter(
             interactor, name, status,
             species, type, gender
         )

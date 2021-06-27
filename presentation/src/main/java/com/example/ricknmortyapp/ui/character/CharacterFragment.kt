@@ -30,11 +30,9 @@ class CharacterFragment() : BaseFragment<CharacterViewModel>() {
         viewModel.id = characterId
         viewModel.fetch()
         viewModel.character.observe(viewLifecycleOwner, { item ->
-            if (item != null) {
-                binding.setVariable(BR.character, item.data)
-                refresh.isRefreshing = false
-                item.data?.episode?.let { getEpisodesIds(it) }
-            }
+            binding.setVariable(BR.character, item.data)
+            refresh.isRefreshing = false
+            item.data?.episode?.let { getEpisodesIds(it) }
         })
 
         bindBackNavigationButton(view)

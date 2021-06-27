@@ -8,8 +8,8 @@ import com.example.domain.interactors.IEpisodeInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
 import com.example.ricknmortyapp.ui.adapter.PagingAdapter
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodeFilterPagingAdapterImpl
-import com.example.ricknmortyapp.ui.adapter.episode.EpisodeIdsPagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.episode.EpisodeFilterPagingAdapter
+import com.example.ricknmortyapp.ui.adapter.episode.EpisodeIdsPagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
 
     var isLoading = false
 
-    var adapter: PagingAdapter<EpisodeList> = EpisodeFilterPagingAdapterImpl(interactor)
+    var adapter: PagingAdapter<EpisodeList> = EpisodeFilterPagingAdapter(interactor)
 
     fun fetch() {
         adapter.reset()
@@ -37,7 +37,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
     }
 
     fun getData(ids: String) = viewModelScope.launch {
-        adapter = EpisodeIdsPagingAdapterImpl(interactor, ids)
+        adapter = EpisodeIdsPagingAdapter(interactor, ids)
         fetchData(ids)
     }
 
@@ -63,7 +63,7 @@ class EpisodeListViewModel @Inject constructor(private val interactor: IEpisodeI
     }
 
     fun filter(name: String = "", episode: String = "") {
-        adapter = EpisodeFilterPagingAdapterImpl(
+        adapter = EpisodeFilterPagingAdapter(
             interactor, name, episode
         )
         items.postValue(Resource.Loading())

@@ -2,19 +2,15 @@ package com.example.ricknmortyapp.ui.adapter.location
 
 import com.example.domain.entities.location.LocationList
 import com.example.domain.interactors.ILocationInteractor
-import com.example.domain.repository.Info
-import com.example.ricknmortyapp.ui.adapter.PagingAdapter
+import com.example.ricknmortyapp.ui.adapter.PagingByFilter
 
-class LocationFilterPagingAdapterImpl constructor(
+class LocationFilterPagingAdapter constructor(
     private val interactor: ILocationInteractor,
     private val name: String = "",
     private val type: String = "",
     private val dimension: String = ""
 ) :
-    PagingAdapter<LocationList> {
-
-    var info: Info = Info()
-    var page = 1
+    PagingByFilter<LocationList>() {
 
     override suspend fun getNextPagingData(): LocationList {
         val charactersByFilter =
@@ -22,17 +18,5 @@ class LocationFilterPagingAdapterImpl constructor(
         info = charactersByFilter.info
         page = getNextPage()
         return charactersByFilter
-    }
-
-    override fun isLast(): Boolean {
-        return info.next == null
-    }
-
-    override fun getNextPage(): Int {
-        return info.next?.split("?page=")?.get(1)?.split("&")?.get(0)?.toInt() ?: -1
-    }
-
-    override fun reset() {
-        page = 1
     }
 }

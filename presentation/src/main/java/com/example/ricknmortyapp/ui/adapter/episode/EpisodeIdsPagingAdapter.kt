@@ -6,7 +6,7 @@ import com.example.domain.repository.Info
 import com.example.ricknmortyapp.ui.adapter.Action
 import com.example.ricknmortyapp.ui.adapter.PagingByIds
 
-class EpisodeIdsPagingAdapterImpl constructor(
+class EpisodeIdsPagingAdapter constructor(
     private val interactor: IEpisodeInteractor,
     private val ids: String
 ) :

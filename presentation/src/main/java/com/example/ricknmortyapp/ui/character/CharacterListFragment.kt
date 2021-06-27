@@ -16,7 +16,6 @@ import com.example.ricknmortyapp.ui.BaseFragment
 import com.example.ricknmortyapp.ui.adapter.PaginationScrollListener
 import com.example.ricknmortyapp.ui.adapter.RecyclerBindingAdapter
 
-
 class CharacterListFragment(private val ids: String? = null) :
     BaseFragment<CharacterListViewModel>() {
 
@@ -72,34 +71,36 @@ class CharacterListFragment(private val ids: String? = null) :
             }
             adapter.updateAdapter(item.data)
             onRefreshEnd()
-            onLoadingDataEnd()
         })
 
-        onLoadingData = {
-            if (viewModel.isLoading) view.findViewById<ProgressBar>(R.id.progress).visibility =
-                View.VISIBLE
-        }
-
-        onLoadingDataEnd = {
-            view.findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
-        }
-
-        recyclerView.addOnScrollListener(object :
-            PaginationScrollListener(recyclerView.layoutManager as GridLayoutManager) {
-
-            override fun isLastPage(): Boolean {
-                return viewModel.isLastPage()
+        onLoadingData =
+            {
+                if (viewModel.isLoading) view.findViewById<ProgressBar>(R.id.progress).visibility =
+                    View.VISIBLE
             }
 
-            override fun isLoading(): Boolean {
-                return viewModel.isLoading
+        onLoadingDataEnd =
+            {
+                view.findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
             }
 
-            override fun loadMoreItems() {
-                loadNextPage()
-                onLoadingData()
-            }
-        })
+        recyclerView.addOnScrollListener(
+            object :
+                PaginationScrollListener(recyclerView.layoutManager as GridLayoutManager) {
+
+                override fun isLastPage(): Boolean {
+                    return viewModel.isLastPage()
+                }
+
+                override fun isLoading(): Boolean {
+                    return viewModel.isLoading
+                }
+
+                override fun loadMoreItems() {
+                    loadNextPage()
+                    onLoadingData()
+                }
+            })
 
     }
 

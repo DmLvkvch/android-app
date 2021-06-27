@@ -7,7 +7,7 @@ import com.example.ricknmortyapp.ui.adapter.Action
 import com.example.ricknmortyapp.ui.adapter.PagingAdapter
 import com.example.ricknmortyapp.ui.adapter.PagingByIds
 
-class CharacterIdsPagingAdapterImpl constructor(
+class CharacterIdsPagingAdapter constructor(
     private val interactor: ICharacterInteractor,
     private val ids: String
 ) :

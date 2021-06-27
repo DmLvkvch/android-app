@@ -8,7 +8,7 @@ import com.example.domain.interactors.ILocationInteractor
 import com.example.domain.repository.Resource
 import com.example.ricknmortyapp.ui.BaseViewModel
 import com.example.ricknmortyapp.ui.adapter.PagingAdapter
-import com.example.ricknmortyapp.ui.adapter.location.LocationFilterPagingAdapterImpl
+import com.example.ricknmortyapp.ui.adapter.location.LocationFilterPagingAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class LocationListViewModel @Inject constructor(private val interactor: ILocatio
 
     var locations: MutableList<Location> = mutableListOf()
 
-    var adapter: PagingAdapter<LocationList> = LocationFilterPagingAdapterImpl(interactor)
+    var adapter: PagingAdapter<LocationList> = LocationFilterPagingAdapter(interactor)
 
     var isLoading = false
 
@@ -49,7 +49,7 @@ class LocationListViewModel @Inject constructor(private val interactor: ILocatio
     }
 
     fun filter(name: String, type: String, dimension: String) {
-        adapter = LocationFilterPagingAdapterImpl(
+        adapter = LocationFilterPagingAdapter(
             interactor, name, type, dimension
         )
         items.postValue(Resource.Loading())

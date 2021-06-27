@@ -22,11 +22,9 @@ class LocationFragment(private val locationId: Int = -1) : BaseFragment<Location
         viewModel.id = locationId
         viewModel.fetch()
         viewModel.location.observe(viewLifecycleOwner, { item ->
-            if (item != null) {
-                binding.setVariable(BR.location, item.data)
-                refresh.isRefreshing = false
-                characterListFragment()
-            }
+            binding.setVariable(BR.location, item.data)
+            refresh.isRefreshing = false
+            characterListFragment()
         })
 
         bindBackNavigationButton(view)
